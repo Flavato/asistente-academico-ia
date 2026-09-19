@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ titulo }}</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 30px 20px;
+            font-family: Arial, sans-serif;
+            background-color: #eef4f8;
+            color: #243447;
+        }
+
+        .contenedor {
+            width: 100%;
+            max-width: 760px;
+            margin: auto;
+            padding: 35px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .etiqueta {
+            margin-bottom: 8px;
+            color: #1769aa;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: #123b5d;
+        }
+
+        .descripcion {
+            margin-bottom: 28px;
+            color: #526575;
+            line-height: 1.6;
+        }
+
+        form {
+            display: grid;
+            gap: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #b8c7d1;
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #1769aa;
+            outline: 2px solid rgba(23, 105, 170, 0.15);
+        }
+
+        button {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: #1769aa;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0f527f;
+        }
+
+        .resultado {
+            margin-top: 28px;
+            padding: 22px;
+            border-left: 5px solid #24733f;
+            border-radius: 8px;
+            background-color: #eef8f1;
+        }
+
+        .resultado h2 {
+            margin-top: 0;
+            color: #18572e;
+        }
+
+        .resultado p {
+            line-height: 1.6;
+        }
+
+        .error {
+            margin-top: 25px;
+            padding: 15px;
+            border-left: 5px solid #b3261e;
+            border-radius: 8px;
+            background-color: #fff1f0;
+            color: #8b1e18;
+            font-weight: bold;
+        }
+
+        .explicacion {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #d8e1e7;
+            color: #526575;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .guardado {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #e7f5eb;
+            color: #18572e;
+            font-weight: bold;
+        }
+
+        .historial {
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 1px solid #d8e1e7;
+        }
+
+        .historial h2 {
+            color: #123b5d;
+        }
+
+        .tarea-guardada {
+            margin-bottom: 16px;
+            padding: 18px;
+            border: 1px solid #d8e1e7;
+            border-radius: 10px;
+            background-color: #f8fafc;
+        }
+
+        .tarea-guardada h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #1769aa;
+        }
+
+        .tarea-guardada p {
+            margin: 7px 0;
+            line-height: 1.5;
+        }
+
+        .sin-tareas {
+            color: #526575;
+            font-style: italic;
+        }
+
+        .clima {
+            margin-top: 30px;
+            padding: 20px;
+            border-left: 5px solid #d27a00;
+            border-radius: 8px;
+            background-color: #fff7e8;
+        }
+
+        .clima h2 {
+            margin-top: 0;
+            color: #8a4f00;
+        }
+
+        .clima p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="contenedor">
+        <p class="etiqueta">Prácticas Profesionalizantes III</p>
+
+        <h1>{{ titulo }}</h1>
+
+        <p class="descripcion">
+            {{ descripcion }}
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div>
+                <label for="materia">Materia</label>
+
+                <input
+                    type="text"
+                    id="materia"
+                    name="materia"
+                    value="{{ materia|default:'' }}"
+                    placeholder="Ejemplo: Prácticas Profesionalizantes III"
+                    required
+                >
+            </div>
+
+            <div>
+                <label for="tarea">Descripción de la tarea</label>
+
+                <textarea
+                    id="tarea"
+                    name="tarea"
+                    placeholder="Ejemplo: completar el prototipo del asistente"
+                    required
+                >{{ tarea|default:'' }}</textarea>
+            </div>
+
+            <div>
+                <label for="fecha_entrega">Fecha de entrega</label>
+
+                <input
+                    type="date"
+                    id="fecha_entrega"
+                    name="fecha_entrega"
+                    value="{{ fecha_entrega|default:'' }}"
+                    required
+                >
+            </div>
+
+            <div>
+                <label for="dificultad">Nivel de dificultad</label>
+
+                <select id="dificultad" name="dificultad" required>
+                    <option value="">Seleccionar</option>
+
+                    <option
+                        value="baja"
+                        {% if dificultad == "baja" %}selected{% endif %}
+                    >
+                        Baja
+                    </option>
+
+                    <option
+                        value="media"
+                        {% if dificultad == "media" %}selected{% endif %}
+                    >
+                        Media
+                    </option>
+
+                    <option
+                        value="alta"
+                        {% if dificultad == "alta" %}selected{% endif %}
+                    >
+                        Alta
+                    </option>
+                </select>
+            </div>
+
+            <button type="submit">
+                Generar recomendación
+            </button>
+        </form>
+
+        {% if error %}
+            <section class="error">
+                {{ error }}
+            </section>
+        {% endif %}
+
+        {% if guardado %}
+            <section class="guardado">
+                {{ guardado }}
+            </section>
+        {% endif %}
+
+        {% if resultado %}
+            <section class="resultado">
+                <h2>Recomendación del asistente</h2>
+
+                <p>
+                    <strong>Materia:</strong>
+                    {{ resultado.materia }}
+                </p>
+
+                <p>
+                    <strong>Tarea:</strong>
+                    {{ resultado.tarea }}
+                </p>
+
+                <p>
+                    <strong>Días restantes:</strong>
+                    {{ resultado.dias_restantes }}
+                </p>
+
+                <p>
+                    <strong>Prioridad:</strong>
+                    {{ resultado.prioridad }}
+                </p>
+
+                <p>
+                    <strong>Plan recomendado:</strong><br>
+                    {{ resultado.recomendacion }}
+                </p>
+            </section>
+        {% endif %}
+
+        <section class="clima">
+            <h2>Información externa del clima</h2>
+
+            {% if clima.error %}
+                <p>{{ clima.error }}</p>
+            {% else %}
+                <p>
+                    <strong>Ciudad:</strong>
+                    {{ clima.ciudad }}
+                </p>
+
+                <p>
+                    <strong>Temperatura actual:</strong>
+                    {{ clima.temperatura }} °C
+                </p>
+
+                <p>
+                    <strong>Sensación térmica:</strong>
+                    {{ clima.sensacion }} °C
+                </p>
+
+                <p>
+                    <strong>Estado:</strong>
+                    {{ clima.estado }}
+                </p>
+            {% endif %}
+        </section>
+
+        <section class="historial">
+            <h2>Historial de actividades</h2>
+
+            {% for actividad in historial %}
+                <article class="tarea-guardada">
+                    <h3>{{ actividad.materia }}</h3>
+
+                    <p>
+                        <strong>Tarea:</strong>
+                        {{ actividad.descripcion }}
+                    </p>
+
+                    <p>
+                        <strong>Fecha de entrega:</strong>
+                        {{ actividad.fecha_entrega|date:"d/m/Y" }}
+                    </p>
+
+                    <p>
+                        <strong>Dificultad:</strong>
+                        {{ actividad.get_dificultad_display }}
+                    </p>
+
+                    <p>
+                        <strong>Prioridad:</strong>
+                        {{ actividad.prioridad }}
+                    </p>
+                </article>
+
+            {% empty %}
+                <p class="sin-tareas">
+                    Todavía no hay actividades guardadas.
+                </p>
+            {% endfor %}
+        </section>
+
+        <section class="explicacion">
+            Este prototipo analiza la fecha de entrega y la dificultad
+            de la actividad para generar una recomendación académica.
+        </section>
+    </main>
+</body>
+</html>
